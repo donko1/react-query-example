@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import BasicQuery from "./pages/BasicQuery";
+import UseQueryForDiffKeys from "./pages/useQueryForDiffKeys";
 import MutationExample from "./pages/Mutations";
 import "./App.css";
 
@@ -20,6 +21,9 @@ function App() {
             <li>
               <Link to="/mutations">Mutations</Link>
             </li>
+            <li>
+              <Link to="/useQueryForDiffKeys">useQuery for different keys</Link>
+            </li>
           </ul>
         </nav>
 
@@ -28,6 +32,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/basic-query" element={<BasicQuery />} />
             <Route path="/Mutations" element={<MutationExample />} />
+            <Route
+              path="/useQueryForDiffKeys"
+              element={<UseQueryForDiffKeys />}
+            />
           </Routes>
         </main>
       </div>

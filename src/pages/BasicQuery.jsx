@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const fetchCharacters = async () => {
-  const { data } = await axios.get("https://rickandmortyapi.com/api/character");
+  const { data } = await axios.get(
+    "https://rickandmortyapi.com/api/charactкer"
+  );
   return data.results;
 };
 
@@ -10,6 +12,8 @@ const BasicQuery = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["characters"],
     queryFn: fetchCharacters,
+    staleTime: 60 * 1000, // Значит, что раз в минуту будет обновляться
+    retry: 2, // Количество повторений перед выкидыванием ошибки. Изначально 3
   });
 
   if (isLoading)
