@@ -1,20 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const fetchCharacters = async () => {
-  const { data } = await axios.get(
-    "https://rickandmortyapi.com/api/charactкer"
-  );
+  const { data } = await axios.get("https://rickandmortyapi.com/api/character");
   return data.results;
 };
 
-const BasicQuery = () => {
-  const { data, isLoading, isError, error } = useQuery({
+function groupOptions() {
+  // Позволяет сгруппировать опции
+  return queryOptions({
     queryKey: ["characters"],
     queryFn: fetchCharacters,
-    staleTime: 60 * 1000, // Значит, что раз в минуту будет обновляться
-    retry: 2, // Количество повторений перед выкидыванием ошибки. Изначально 3
+    staleTime: 60 * 1000,
+    retry: 2,
   });
+}
+
+const BasicQuery = () => {
+  // const { data, isLoading, isError, error } = useQuery({
+  //   queryKey: ["characters"],
+  //   queryFn: fetchCharacters,
+  //   staleTime: 60 * 1000, // Значит, что раз в минуту будет обновляться
+  //   retry: 2, // Количество повторений перед выкидыванием ошибки. Изначально 3
+  // });
+
+  const { data, isLoading, isError, error } = useQuery(groupOptions());
 
   if (isLoading)
     return (
