@@ -4,6 +4,7 @@ import BasicQuery from "./pages/BasicQuery";
 import UseQueryForDiffKeys from "./pages/useQueryForDiffKeys";
 import MutationExample from "./pages/Mutations";
 import "./App.css";
+import NetworkMode from "./pages/NetworkMode";
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
             <li>
               <Link to="/useQueryForDiffKeys">useQuery for different keys</Link>
             </li>
+            <li>
+              <Link to="/NetworkMode">NetworkMode</Link>
+            </li>
           </ul>
         </nav>
 
@@ -36,6 +40,7 @@ function App() {
               path="/useQueryForDiffKeys"
               element={<UseQueryForDiffKeys />}
             />
+            <Route path="/NetworkMode" element={<NetworkMode />} />
           </Routes>
         </main>
       </div>
