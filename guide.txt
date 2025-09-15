@@ -1,1 +1,37 @@
 1. Обязательно посмотри как изменился main.jsx
+
+Запросы, зависящие к useQuery можно написать так:
+
+// Get the user
+const { data: user } = useQuery({
+  queryKey: ['user', email],
+  queryFn: getUserByEmail,
+})
+
+const userId = user?.id
+
+// Then get the user's projects
+const {
+  status,
+  fetchStatus,
+  data: projects,
+} = useQuery({
+  queryKey: ['projects', userId],
+  queryFn: getProjectsByUser,
+  // The query will not execute until the userId exists
+  enabled: !!userId,
+})
+
+Это знаичит, что второй будет только тогда готов, когда появится userId. Пока userID нет он:
+    status: 'pending'
+    isPending: true
+    fetchStatus: 'idle'
+Как только появится юзер:
+    status: 'pending'
+    isPending: true
+    fetchStatus: 'fetching'
+Когда появятся проекты:
+    status: 'success'
+    isPending: false
+    fetchStatus: 'idle'
+Лучше этим не страдать, а то производительность пострадает
