@@ -5,6 +5,7 @@ import UseQueryForDiffKeys from "./pages/useQueryForDiffKeys";
 import MutationExample from "./pages/Mutations";
 import "./App.css";
 import NetworkMode from "./pages/NetworkMode";
+import DogBreeds from "./pages/IsFetchingOrIsLoading";
 
 function App() {
   return (
@@ -28,6 +29,9 @@ function App() {
             <li>
               <Link to="/NetworkMode">NetworkMode</Link>
             </li>
+            <li>
+              <Link to="/IsFetchingOrIsLoading">Is fetching or is loading</Link>
+            </li>
           </ul>
         </nav>
 
@@ -41,6 +45,7 @@ function App() {
               element={<UseQueryForDiffKeys />}
             />
             <Route path="/NetworkMode" element={<NetworkMode />} />
+            <Route path="/IsFetchingOrIsLoading" element={<DogBreeds />} />
           </Routes>
         </main>
       </div>
