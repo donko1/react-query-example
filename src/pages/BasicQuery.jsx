@@ -11,8 +11,12 @@ function groupOptions() {
   return queryOptions({
     queryKey: ["characters"],
     queryFn: fetchCharacters,
-    staleTime: 60 * 1000,
-    retry: 2,
+    staleTime: 60 * 1000, // Значит, что раз в минуту будет обновляться
+    // refetchOnWindowFocus: true, // Сделать так, что при focus на окно сделает запрос повторно. base: true
+    retry: 2, // Количество повторений перед выкидыванием ошибки. Изначально 3. true = бесконечно, false = отключить эту функцию
+    // retryDelay: 1000 // delay между повторными попытками
+    // enabled: false, // Позволяет тупо отключить. Норм тема для lazy loading
+    // initialData: initialTodos, // initial, которые потом сразу обновлятся.
   });
 }
 
@@ -20,8 +24,8 @@ const BasicQuery = () => {
   // const { data, isLoading, isError, error } = useQuery({
   //   queryKey: ["characters"],
   //   queryFn: fetchCharacters,
-  //   staleTime: 60 * 1000, // Значит, что раз в минуту будет обновляться
-  //   retry: 2, // Количество повторений перед выкидыванием ошибки. Изначально 3
+  //   staleTime: 60 * 1000,
+  //   retry: 2,
   // });
 
   const { data, isLoading, isError, error } = useQuery(groupOptions());
@@ -47,106 +51,109 @@ const BasicQuery = () => {
     <div>
       <h2>Basic Query Example</h2>
       <p>Первые 20 персонажей из вселенной Рика и Морти</p>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
-        {data.map((character) => (
-          <div
-            key={character.id}
-            style={{
-              border: "1px solid #ddd",
-              padding: "15px",
-              borderRadius: "12px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-              background: "#fff",
-            }}
-          >
-            <img
-              src={character.image}
-              alt={character.name}
+      {data && (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            gap: "20px",
+            marginTop: "20px",
+          }}
+        >
+          {data.map((character) => (
+            <div
+              key={character.id}
               style={{
-                width: "100%",
-                height: "200px",
-                objectFit: "cover",
-                borderRadius: "8px",
-                marginBottom: "15px",
+                border: "1px solid #ddd",
+                padding: "15px",
+                borderRadius: "12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                background: "#fff",
               }}
-            />
-
-            <h3 style={{ margin: "0 0 10px 0", color: "#333" }}>
-              {character.name}
-            </h3>
-
-            <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-              <span
+            >
+              <img
+                src={character.image}
+                alt={character.name}
                 style={{
-                  padding: "4px 8px",
-                  borderRadius: "12px",
-                  fontSize: "12px",
-                  fontWeight: "bold",
-                  backgroundColor:
-                    character.status === "Alive"
-                      ? "#4caf50"
-                      : character.status === "Dead"
-                      ? "#f44336"
-                      : "#9e9e9e",
-                  color: "white",
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                  marginBottom: "15px",
+                }}
+              />
+
+              <h3 style={{ margin: "0 0 10px 0", color: "#333" }}>
+                {character.name}
+              </h3>
+
+              <div
+                style={{ display: "flex", gap: "10px", marginBottom: "10px" }}
+              >
+                <span
+                  style={{
+                    padding: "4px 8px",
+                    borderRadius: "12px",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    backgroundColor:
+                      character.status === "Alive"
+                        ? "#4caf50"
+                        : character.status === "Dead"
+                        ? "#f44336"
+                        : "#9e9e9e",
+                    color: "white",
+                  }}
+                >
+                  {character.status}
+                </span>
+
+                <span
+                  style={{
+                    padding: "4px 8px",
+                    borderRadius: "12px",
+                    fontSize: "12px",
+                    backgroundColor: "#e3f2fd",
+                    color: "#1976d2",
+                  }}
+                >
+                  {character.species}
+                </span>
+              </div>
+
+              <p
+                style={{
+                  margin: "5px 0",
+                  fontSize: "14px",
+                  color: "#666",
                 }}
               >
-                {character.status}
-              </span>
+                <strong>Пол:</strong> {character.gender}
+              </p>
 
-              <span
+              <p
                 style={{
-                  padding: "4px 8px",
-                  borderRadius: "12px",
-                  fontSize: "12px",
-                  backgroundColor: "#e3f2fd",
-                  color: "#1976d2",
+                  margin: "5px 0",
+                  fontSize: "14px",
+                  color: "#666",
                 }}
               >
-                {character.species}
-              </span>
+                <strong>Происхождение:</strong> {character.origin.name}
+              </p>
+
+              <p
+                style={{
+                  margin: "5px 0",
+                  fontSize: "12px",
+                  color: "#999",
+                }}
+              >
+                Эпизодов: {character.episode.length}
+              </p>
             </div>
-
-            <p
-              style={{
-                margin: "5px 0",
-                fontSize: "14px",
-                color: "#666",
-              }}
-            >
-              <strong>Пол:</strong> {character.gender}
-            </p>
-
-            <p
-              style={{
-                margin: "5px 0",
-                fontSize: "14px",
-                color: "#666",
-              }}
-            >
-              <strong>Происхождение:</strong> {character.origin.name}
-            </p>
-
-            <p
-              style={{
-                margin: "5px 0",
-                fontSize: "12px",
-                color: "#999",
-              }}
-            >
-              Эпизодов: {character.episode.length}
-            </p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
