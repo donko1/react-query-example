@@ -6,6 +6,7 @@ import MutationExample from "./pages/Mutations";
 import "./App.css";
 import NetworkMode from "./pages/NetworkMode";
 import DogBreeds from "./pages/IsFetchingOrIsLoading";
+import PaginationExample from "./pages/Paginator";
 
 function App() {
   return (
@@ -32,6 +33,9 @@ function App() {
             <li>
               <Link to="/IsFetchingOrIsLoading">Is fetching or is loading</Link>
             </li>
+            <li>
+              <Link to="/Pagination">Paginator</Link>
+            </li>
           </ul>
         </nav>
 
@@ -46,6 +50,7 @@ function App() {
             />
             <Route path="/NetworkMode" element={<NetworkMode />} />
             <Route path="/IsFetchingOrIsLoading" element={<DogBreeds />} />
+            <Route path="/Pagination" element={<PaginationExample />} />
           </Routes>
         </main>
       </div>
