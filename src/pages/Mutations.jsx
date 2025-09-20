@@ -34,19 +34,64 @@ const MutationExample = () => {
 
   const createMutation = useMutation({
     mutationFn: createPost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      setTitle("");
-      setContent("");
+    onMutate: async (newPost) => {
+      // Отменяем исходящие запросы чтобы избежать конфликтов
+      await queryClient.cancelQueries({ queryKey: ["posts"] });
+
+      // Сохраняем предыдущие данные для отката
+      const previousPosts = queryClient.getQueryData(["posts"]);
+
+      // Оптимистичное обновление данных
+      queryClient.setQueryData(["posts"], (old) => [
+        ...old,
+        {
+          id: Date.now(), // Временный ID
+          ...newPost,
+          created_at: new Date().toISOString(),
+        },
+      ]);
+
+      // Возвращаем контекст с предыдущими данными
+      return { previousPosts };
     },
-    onError: (error) => {
+    onError: (error, newPost, context) => {
+      // Откатываем изменения в случае ошибки
+      queryClient.setQueryData(["posts"], context.previousPosts);
       console.error("Ошибка при создании поста:", error);
+    },
+    onSuccess: (data, newPost, context) => {
+      console.log("Пост успешно создан на сервере!", data);
+      // Можно инвалидировать кэш вместо оптимистичного обновления
+      // queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onSettled: (data, error, newPost, context) => {
+      // Выполняется в любом случае после успеха или ошибки
+      console.log("Мутация завершена!");
+      // Инвалидируем кэш для обновления данных с сервера
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: deletePost,
-    onSuccess: () => {
+    onMutate: async (postId) => {
+      await queryClient.cancelQueries({ queryKey: ["posts"] });
+      const previousPosts = queryClient.getQueryData(["posts"]);
+
+      queryClient.setQueryData(["posts"], (old) =>
+        old.filter((post) => post.id !== postId)
+      );
+
+      return { previousPosts };
+    },
+    onError: (error, postId, context) => {
+      queryClient.setQueryData(["posts"], context.previousPosts);
+      console.error("Ошибка при удалении поста:", error);
+    },
+    onSuccess: (data, postId, context) => {
+      console.log("Пост успешно удален!");
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
