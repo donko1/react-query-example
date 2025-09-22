@@ -7,6 +7,7 @@ import "./App.css";
 import NetworkMode from "./pages/NetworkMode";
 import DogBreeds from "./pages/IsFetchingOrIsLoading";
 import PaginationExample from "./pages/Paginator";
+import QueryKeyExample from "./pages/KeyForceUpdate";
 
 function App() {
   return (
@@ -36,6 +37,9 @@ function App() {
             <li>
               <Link to="/Pagination">Paginator</Link>
             </li>
+            <li>
+              <Link to="/KeyForceUpdate">CacheForceUpdate</Link>
+            </li>
           </ul>
         </nav>
 
@@ -51,6 +55,7 @@ function App() {
             <Route path="/NetworkMode" element={<NetworkMode />} />
             <Route path="/IsFetchingOrIsLoading" element={<DogBreeds />} />
             <Route path="/Pagination" element={<PaginationExample />} />
+            <Route path="/KeyForceUpdate" element={<QueryKeyExample />} />
           </Routes>
         </main>
       </div>
