@@ -8,6 +8,7 @@ import NetworkMode from "./pages/NetworkMode";
 import DogBreeds from "./pages/IsFetchingOrIsLoading";
 import PaginationExample from "./pages/Paginator";
 import QueryKeyExample from "./pages/KeyForceUpdate";
+import LongTaskComponent from "./pages/CancelRequest";
 
 function App() {
   return (
@@ -40,6 +41,9 @@ function App() {
             <li>
               <Link to="/KeyForceUpdate">CacheForceUpdate</Link>
             </li>
+            <li>
+              <Link to="/LongTaskComponent">Cancel request </Link>
+            </li>
           </ul>
         </nav>
 
@@ -56,6 +60,7 @@ function App() {
             <Route path="/IsFetchingOrIsLoading" element={<DogBreeds />} />
             <Route path="/Pagination" element={<PaginationExample />} />
             <Route path="/KeyForceUpdate" element={<QueryKeyExample />} />
+            <Route path="/LongTaskComponent" element={<LongTaskComponent />} />
           </Routes>
         </main>
       </div>
